@@ -43,3 +43,8 @@ STL |>
   )
 
 ```
+---
+It looks like the differences in the datasets are not too disparate; attributing
+most of this too snapshot in time, whether before or after a key decision; 
+trends are the same.  Will use DPG data to have less friction in future discussions.
+---
