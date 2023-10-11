@@ -14,6 +14,8 @@ Load the data from STL reporting and DPG reporting and compare
 ```{r message = FALSE}
 STL_spend <- read_csv("data\\STL_funding_levels.csv")
 STL_spend
+colnames(STL_spend)
+
 ```
 
 ```{r message=FALSE}
@@ -27,9 +29,13 @@ six_degrees <- c(
   )
 
 STL_spend |> ggplot(aes(FY)) + 
-  geom_point("Roadmap projects") +
-  geom_bar("Roadmap amounts (000's)")
+  geom_point(aes(y = "Roadmap projects")) +
+  geom_col(aes(y = "Roadmap amounts (000's)"))
 
+
+
+ggplot(STL_spend, aes(FY)) +
+  geom_line(aes(y = ))
 # plot these degrees over time and display percentage of total
 # STL |>
 #   filter(field %in% six_degrees) |>
