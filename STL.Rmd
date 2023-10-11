@@ -12,29 +12,24 @@ opts_chunk$set(fig.align="center", fig.height=4, fig.width=5.5)
 
 Load the data from STL reporting and DPG reporting and compare
 ```{r message = FALSE}
-STL_spend <- read_csv("data\\STL_funding_levels.csv")
+STL_spend <- read_csv("data\\STL_funding_levels.csv"
+  # , col_types = cols("Roadmap amounts (000's)" = col_double())
+  )
 STL_spend
 colnames(STL_spend)
-
+STL_spend |> 
+  mutate("Roadmap amounts (000's)" = "Roadmap amounts (000's)" |> 
+  str_remove_all("\\$,")) |> as.numeric(unlist(x))
+STL_spend$var
 ```
 
 ```{r message=FALSE}
 # examine colums; plot over time
-six_degrees <- c(
-  "Psychology", 
-  "Communications technologies", 
-  "Engineering", "Business", 
-  "Education", 
-  "Architecture and related services"
-  )
-
 STL_spend |> ggplot(aes(FY)) + 
   geom_point(aes(y = "Roadmap projects")) +
   geom_col(aes(y = "Roadmap amounts (000's)"))
 
-
-
-ggplot(STL_spend, aes(FY)) +
+ggplot(STL_spend, aes(FY, "Roadmap amounts (000's)"))
   geom_line(aes(y = ))
 # plot these degrees over time and display percentage of total
 # STL |>
