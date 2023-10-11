@@ -12,7 +12,7 @@ opts_chunk$set(fig.align="center", fig.height=4, fig.width=5.5)
 
 Load the data from STL reporting and DPG reporting and compare
 ```{r message = FALSE}
-STL_spemd <- read_csv("data\\STL_funding_levels.csv")
+STL_spend <- read_csv("data\\STL_funding_levels.csv")
 STL_spend
 ```
 
@@ -26,21 +26,25 @@ six_degrees <- c(
   "Architecture and related services"
   )
 
+STL_spend |> ggplot(aes(FY)) + 
+  geom_point("Roadmap projects") +
+  geom_bar("Roadmap amounts (000's)")
+
 # plot these degrees over time and display percentage of total
-STL |>
-  filter(field %in% six_degrees) |>
-  mutate(perc = perc * 100) |> # transform column values
-  mutate(field = fct_reorder(field, perc, max)) |>  # reorder by largest per pane
-  ggplot(aes(year, perc)) +
-  geom_point() + geom_smooth() +
-  facet_wrap(
-    vars(field), 
-    ncol = 2, 
-    labeller = label_wrap_gen()
-    ) +
-  labs(
-    y = "percentages amongst all fields of study"
-  )
+# STL |>
+#   filter(field %in% six_degrees) |>
+#   mutate(perc = perc * 100) |> # transform column values
+#   mutate(field = fct_reorder(field, perc, max)) |>  # reorder by largest per pane
+#   ggplot(aes(year, perc)) +
+#   geom_point() + geom_smooth() +
+#   facet_wrap(
+#     vars(field), 
+#     ncol = 2, 
+#     labeller = label_wrap_gen()
+#     ) +
+#   labs(
+#     y = "percentages amongst all fields of study"
+#   )
 
 ```
 ---
