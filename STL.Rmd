@@ -25,20 +25,28 @@ colnames(STL_spend)
 ```{r message = FALSE}
 colnames(STL_spend)
 
-bscale <- diff(ylim.prim)/diff(ylim.sec)
-ascale <- ylim.prim[1] - b*ylim.sec[1]
-
 scaleFactor <- max(STL_spend$Roadmap_projects) / max(STL_spend$Roadmap_amounts)
 
 ggplot(STL_spend, aes(x = FY)) +
-  geom_line(aes(y = Roadmap_projects))
+  geom_line(aes(y = Roadmap_projects * 500, group = 1), color = "blue", size = 1.7) +
+  geom_point(aes(y = Roadmap_projects * 500), size = 2, color = "blue") +
+  geom_col(aes(y = Roadmap_amounts, label = Roadmap_amounts), fill = "steelblue", alpha = 0.8) +
+  scale_y_continuous(name = "$ (000's)", sec.axis=sec_axis(~./500, name="# projects")) +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank())
+
++
+  geom_text(aes(label = Roadmap_amounts))
+
+
+# next set text on columns with geom_text() and set left y-axis labels to be more readable
+
 
 # examine columns; plot over time
-STL_spend |> ggplot(aes(FY, group = 1)) + 
+STL_spend |> ggplot(aes(FY)) + 
   geom_point(aes(y = Roadmap_projects * 500, group = FY)) +
   geom_col(aes(y = Roadmap_amounts)) +  
   scale_y_continuous(sec.axis = sec_axis(~. *500)) 
-# + geom_text(aes(label = `Roadmap_projects`, vjust = -0.5))
 ```
 
 
