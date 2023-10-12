@@ -16,7 +16,9 @@ opts_chunk$set(fig.align="center", fig.height=4, fig.width=5.5)
 
 Below is the historical performance of the Strategy-to-Launch life cycle in the BAT.
 
-Comparing the data from STL reporting and DPG reporting.
+Comparing the data from STL reporting and the BAT's Digital Portfolio Governance (DPG) reporting. 
+Some variance was found in the planned vs. executed project reporting in the datasets 
+but trends are consistent.
 
 
 ```{r message = FALSE, echo=FALSE, warning=FALSE}
@@ -30,7 +32,7 @@ STL_spend
 ```
 
 
-Table 1. Raw data
+Table 1. Raw DPG & STL data
 
 
 ---
@@ -202,7 +204,9 @@ Fig 3.  STL project totals by fiscal year.
 
 ---
 
-The differences in the datasets are not too disparate; attributing
+**Findings**
+
+The differences in the DPG and STL datasets are not too disparate; attributing
 most of the differences to snapshots in time; whether before or after a key decision, 
 trends are the same. Using the DPG data will result in have less friction in 
 future discussions. Depicted as such.
@@ -214,7 +218,7 @@ projects into large transform efforts, under the new fiscal definitions.
 FY22 and earlier BAT funding categories had double the granularity. 
 No correlation exists between project counts and funding levels.
 
-Funding for certain IT systems, like Windchill, has also shifted.  Dell Digital
+Funding for certain IT systems, like Windchill, has also shifted. Dell Digital
 does not provide support as it did in 2018 and 2020 when STL funded those upgrades.
 
 ---
