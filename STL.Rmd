@@ -31,7 +31,7 @@ scaleFactor <- max(STL_spend$Roadmap_projects) / max(STL_spend$Roadmap_amounts)
 
 
 ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
-  geom_line(aes(y = Roadmap_projects * 500, group = 1), color = "blue", size = 1.7) +
+  geom_line(aes(y = Roadmap_projects * 500, group = 1, linetype = "# of projects"), color = "blue", size = 1.7) +
   geom_point(aes(y = Roadmap_projects * 500), size = 2, color = "blue") +
   geom_col(aes(y = Roadmap_amounts), fill = "steelblue", alpha = 0.8) + 
   scale_y_continuous(name = "$ (000's)", sec.axis=sec_axis(~./500, name="# projects")) +
@@ -45,7 +45,8 @@ ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
     # axis.title.x = element_text(margin = margin(t = 5)),
     axis.text.x.bottom = element_text(margin = margin(t = 5)),
     axis.title.y.right = element_text(vjust = 2),
-    axis.title.y.left = element_text(vjust = 2)
+    axis.title.y.left = element_text(vjust = 2),
+    legend.position = c(.5,.5)
     )
 
 # next do for self-funded
@@ -54,13 +55,16 @@ ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
 
 
 ```{r message = FALSE}
-
+# self-fund
 ggplot(STL_spend, aes(FY, Self_projects)) + geom_line()
 
 ```
 
 
 ```{r message = FALSE}
+#facet wrap by year and groupby project spend of roadmap & self in side-by-side
+# bars, wrapped with vars = FY
+
 unique(STL_spend$"Roadmap amounts (000's)")
 
 ggplot(STL_spend, aes_strin(FY, "Total (000's)")) +
