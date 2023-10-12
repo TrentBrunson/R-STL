@@ -1,5 +1,5 @@
 ---
-title: "Strategy to Launch"
+title: "Strategy to Launch Historical Funding"
 ---
 
 ```{r global_options, include=FALSE}
@@ -13,19 +13,27 @@ library(scales)
 opts_chunk$set(fig.align="center", fig.height=4, fig.width=5.5)
 ```
 
-Load the data from STL reporting and DPG reporting and compare
-```{r message = FALSE}
+
+Comparing the data from STL reporting and DPG reporting.
+
+
+```{r message = FALSE, echo=FALSE, warning=FALSE}
 # load data
 STL_spend <- read_csv("data\\STL_funding_levels_no_formatting.csv"
   # , col_types = cols("Roadmap amounts (000's)" = col_double())
   )
 STL_spend
-unique(STL_spend$"Roadmap_amounts")
-
-colnames(STL_spend)
+# unique(STL_spend$"Roadmap_amounts")
+# colnames(STL_spend)
 ```
 
-```{r message = FALSE}
+
+Table 1. Raw data
+
+
+---
+
+```{r message = FALSE, echo=FALSE, warning=FALSE, results=FALSE}
 colnames(STL_spend)
 
 # scaleFactor <- max(STL_spend$Roadmap_projects) / max(STL_spend$Roadmap_amounts)
@@ -78,7 +86,11 @@ ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
 ```
 
 
-```{r message = FALSE}
+Figure 1. Roadmap funded projects and funding levels each fiscal year.
+
+---
+
+```{r message = FALSE, echo=FALSE, warning=FALSE, results=FALSE}
 # self-fund
 colnames(STL_spend)
 
@@ -129,38 +141,24 @@ ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
 
 ```
 
+Figure 2. Self-funded projects and cost each fiscal year.
 
-```{r message = FALSE}
+```{r message = FALSE, echo=FALSE, warning=FALSE, results=FALSE}
 #facet wrap by year and groupby project spend of roadmap & self in side-by-side
 # bars, wrapped with vars = FY
-
-unique(STL_spend$"Roadmap amounts (000's)")
-
-ggplot(STL_spend, aes_strin(FY, "Total (000's)")) +
-  geom_point() +
-  geom_line() +
-  geom_text(aes(label = "Total (000's)", vjust = -0.5))
-
 colnames(STL_spend)
-STL_spend
-colnames(mtcars)
-ggplot(mtcars, aes(y = cyl)) + geom_bar()
+ggplot(STL_spend, aes(x = FY, y = Total_projects, label = Total)) +
+  geom_col(aes(y = Total))
+
 ```
 
+Fig 3.  Totals by fiscal year.
 
-```{r message = FALSE}
-# ylim(0, 200000)
-
-ggplot(STL_spend, aes(x = FY, y = "Total (000's)", group = "Total (000's)")) +
-  geom_point() +
-  geom_line()
-```
-
-
-```{r message = FALSE}
-```
 ---
-It looks like the differences in the datasets are not too disparate; attributing
-most of this too snapshot in time, whether before or after a key decision; 
-trends are the same.  Will use DPG data to have less friction in future discussions.
+
+The differences in the datasets are not too disparate; attributing
+most of this to snapshot in time, whether before or after a key decision; 
+trends are the same. Using the DPG data will result in have less friction in 
+future discussions. 
+
 ---
