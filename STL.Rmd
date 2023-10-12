@@ -14,6 +14,8 @@ opts_chunk$set(fig.align="center", fig.height=4, fig.width=5.5)
 ```
 
 
+Below is the historical performance of the Strategy-to-Launch life cycle in the BAT.
+
 Comparing the data from STL reporting and DPG reporting.
 
 
@@ -33,7 +35,7 @@ Table 1. Raw data
 
 ---
 
-```{r message = FALSE, echo=FALSE, warning=FALSE, results=FALSE}
+```{r message = FALSE, echo=FALSE, warning=FALSE, results=FALSE, fig.width=12}
 colnames(STL_spend)
 
 # scaleFactor <- max(STL_spend$Roadmap_projects) / max(STL_spend$Roadmap_amounts)
@@ -43,7 +45,7 @@ ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
   # set up project visual
     # change scale of data values to align with fund funding scale
     # add vertical bars for funding levels
-  geom_col(aes(y = Roadmap_amounts), fill = "steelblue", alpha = 0.8) + 
+  geom_col(aes(y = Roadmap_amounts), fill = ifelse(STL_spend$FY=="FY25", "grey", "steelblue"), alpha = 0.8) + 
   geom_line(aes(
     y = Roadmap_projects * 500, group = 1, 
     linetype = "# of projects"), 
@@ -90,7 +92,7 @@ Figure 1. Roadmap funded projects and funding levels each fiscal year.
 
 ---
 
-```{r message = FALSE, echo=FALSE, warning=FALSE, results=FALSE}
+```{r message = FALSE, echo=FALSE, warning=FALSE, results=FALSE, fig.width=13}
 # self-fund
 colnames(STL_spend)
 
@@ -98,7 +100,7 @@ colnames(STL_spend)
 ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
   # set up project visual
     # change scale of data values to align with fund funding scale
-  geom_col(aes(y = Self_amounts), fill = "steelblue", alpha = 0.8) + 
+  geom_col(aes(y = Self_amounts), fill = ifelse(STL_spend$FY=="FY25", "grey", "steelblue"), alpha = 0.8) + 
   geom_line(aes(
     y = Self_projects * 100, group = 1, 
     linetype = "# of projects"), 
@@ -108,7 +110,6 @@ ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
     # change scale of points to align with fund funding scale
   geom_point(aes(y = Self_projects * 100), size = 2, color = "blue") +
   # add vertical bars for funding levels
-
   scale_y_continuous(
     name = "$ (000's)", 
     # re-scale secondary axis to accommodate previous scalings
@@ -143,22 +144,77 @@ ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
 
 Figure 2. Self-funded projects and cost each fiscal year.
 
-```{r message = FALSE, echo=FALSE, warning=FALSE, results=FALSE}
-#facet wrap by year and groupby project spend of roadmap & self in side-by-side
-# bars, wrapped with vars = FY
+```{r message = FALSE, echo=FALSE, warning=FALSE, results=FALSE, fig.width=10}
+# total by year 
 colnames(STL_spend)
-ggplot(STL_spend, aes(x = FY, y = Total_projects, label = Total)) +
-  geom_col(aes(y = Total))
+ggplot(STL_spend, aes(x = FY, y = Total_projects, group = interaction(FY, Total), label = Total)) +
+  geom_col(aes(y = Total), fill = ifelse(STL_spend$FY=="FY25", 'grey', "green4")) + 
+  geom_line(aes(
+    y = Total_projects * 400,
+    group = 1,
+    linetype = "# of projects"), 
+    color = "green3",
+    linewidth = 1.7
+  ) +
+  theme_bw() +
+  ggtitle("Total STL Historical funding") +
+    theme(plot.title = element_text(hjust = .44, face = "bold")) +
+  # facet_wrap(
+  #   vars(FY, Total),
+  #   nrow = 4
+  # ) +
+  geom_point(aes(y = Total_projects * 400),
+  color = "green4"
+  ) +
+  # scale_y_continuous(
+  #   name = "Total funding (000's)"
+  # ) +
+  theme(
+    # simplify background elements
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(), 
+    panel.border = element_blank(), 
+    plot.title = element_text((hjust = 10)),
+    # axis.title.x = element_text(margin = margin(t = 5)),
+    # nudge axis text positions
+    axis.text.x.bottom = element_text(margin = margin(t = 5)),
+    axis.title.y.right = element_text(vjust = 2),
+    axis.title.y.left = element_text(vjust = 2),
+    legend.position = c(0.9,0.9),
+    legend.title = element_blank()
+    ) +
+  xlab("Fiscal Year") +
+    geom_text(
+    # use labeler package to represent amounts in millions
+    aes(label = label_number_si()(Total*1000)), 
+    vjust = -0.5, 
+    color = "white"
+    ) +
+  scale_y_continuous(
+    name = "Total Funding (000's)", 
+    # re-scale secondary axis to accommodate previous scalings
+    sec.axis=sec_axis(~./400, name="# projects")
+    ) 
 
 ```
 
-Fig 3.  Totals by fiscal year.
+Fig 3.  STL project totals by fiscal year.
 
 ---
 
 The differences in the datasets are not too disparate; attributing
-most of this to snapshot in time, whether before or after a key decision; 
+most of the differences to snapshots in time; whether before or after a key decision, 
 trends are the same. Using the DPG data will result in have less friction in 
-future discussions. 
+future discussions. Depicted as such.
+
+Funding shifted in FY22 the same time BAT funding definitions changed. Where STL
+funding levels were ~10%+ of total BAT initiatives, recent years has STL funding 
+at 1-2% of total BAT funding levels. Alos, latter-year trends are grouping more 
+projects into large transform efforts, under the new fiscal definitions. 
+FY22 and earlier BAT funding categories had double the granularity. 
+No correlation exists between project counts and funding levels.
+
+Funding for certain IT systems, like Windchill, has also shifted.  Dell Digital
+does not provide support as it did in 2018 and 2020 when STL funded those upgrades.
 
 ---
