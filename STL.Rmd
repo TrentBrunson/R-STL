@@ -37,7 +37,7 @@ unique(STL_spend$"Roadmap amounts (000's)")
 ggplot(STL_spend, aes(FY, "Total (000's)", col = "Total (000's)")) +
   geom_point() +
   geom_line() 
-  ylim(0, 200000)
+  # ylim(0, 200000)
   
 geom_line()
 
