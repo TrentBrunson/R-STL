@@ -15,6 +15,7 @@ opts_chunk$set(fig.align="center", fig.height=4, fig.width=5.5)
 
 Load the data from STL reporting and DPG reporting and compare
 ```{r message = FALSE}
+# load data
 STL_spend <- read_csv("data\\STL_funding_levels_no_formatting.csv"
   # , col_types = cols("Roadmap amounts (000's)" = col_double())
   )
@@ -27,27 +28,50 @@ colnames(STL_spend)
 ```{r message = FALSE}
 colnames(STL_spend)
 
-scaleFactor <- max(STL_spend$Roadmap_projects) / max(STL_spend$Roadmap_amounts)
+# scaleFactor <- max(STL_spend$Roadmap_projects) / max(STL_spend$Roadmap_amounts)
 
-
+# plot number of projects and cost by FY
 ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
-  geom_line(aes(y = Roadmap_projects * 500, group = 1, linetype = "# of projects"), color = "blue", size = 1.7) +
-  geom_point(aes(y = Roadmap_projects * 500), size = 2, color = "blue") +
+  # set up project visual
+    # change scale of data values to align with fund funding scale
+    # add vertical bars for funding levels
   geom_col(aes(y = Roadmap_amounts), fill = "steelblue", alpha = 0.8) + 
-  scale_y_continuous(name = "$ (000's)", sec.axis=sec_axis(~./500, name="# projects")) +
-  theme_bw() + ggtitle("STL Roadmap Funded") + 
-  geom_text(aes(label = label_number_si()(Roadmap_amounts*1000)), vjust = -0.5, color = "white") +
+  geom_line(aes(
+    y = Roadmap_projects * 500, group = 1, 
+    linetype = "# of projects"), 
+    color = "blue", linewidth = 1.7, alpha = 0.7
+    ) +
+  # add points for project numbers, possibly labels - depends on clutter
+    # change scale of points to align with fund funding scale
+  geom_point(aes(y = Roadmap_projects * 500), size = 2, color = "blue") +
+  scale_y_continuous(
+    name = "$ (000's)", 
+    # re-scale secondary axis to accommodate previous scalings
+    sec.axis=sec_axis(~./500, name="# projects")
+    ) +
+  theme_bw() + 
+  ggtitle("STL Roadmap Funded") + 
+  geom_text(
+    # use labeler package to represent amounts in millions
+    aes(label = label_number_si()(Roadmap_amounts*1000)), 
+    vjust = -0.5, 
+    color = "white"
+    ) +
   theme(
+    # simplify background elements
     panel.grid.minor = element_blank(),
     panel.grid.major = element_blank(), 
     panel.border = element_blank(), 
     plot.title = element_text((hjust = 10)),
     # axis.title.x = element_text(margin = margin(t = 5)),
+    # nudge axis text positions
     axis.text.x.bottom = element_text(margin = margin(t = 5)),
     axis.title.y.right = element_text(vjust = 2),
     axis.title.y.left = element_text(vjust = 2),
-    legend.position = c(.5,.5)
-    )
+    legend.position = c(0.95,0.95),
+    legend.title = element_blank(),
+    ) +
+  xlab("Fiscal Year")
 
 # next do for self-funded
 
@@ -56,7 +80,52 @@ ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
 
 ```{r message = FALSE}
 # self-fund
-ggplot(STL_spend, aes(FY, Self_projects)) + geom_line()
+colnames(STL_spend)
+
+# plot number of projects and cost by FY
+ggplot(STL_spend, aes(x = FY, y = Roadmap_projects, label = Roadmap_amounts)) +
+  # set up project visual
+    # change scale of data values to align with fund funding scale
+  geom_col(aes(y = Self_amounts), fill = "steelblue", alpha = 0.8) + 
+  geom_line(aes(
+    y = Self_projects * 100, group = 1, 
+    linetype = "# of projects"), 
+    color = "blue", linewidth = 1.7, alpha = 0.7
+    ) +
+  # add points for project numbers, possibly labels - depends on clutter
+    # change scale of points to align with fund funding scale
+  geom_point(aes(y = Self_projects * 100), size = 2, color = "blue") +
+  # add vertical bars for funding levels
+
+  scale_y_continuous(
+    name = "$ (000's)", 
+    # re-scale secondary axis to accommodate previous scalings
+    sec.axis=sec_axis(~./100, name="# projects")
+    ) +
+  theme_bw() + 
+  ggtitle("STL Self-Funded") + 
+  geom_text(
+    # use labeler package to represent amounts in millions
+    aes(label = label_number_si()(Self_amounts*1000)), 
+    vjust = -0.5, 
+    color = "white"
+    ) +
+  theme(
+    # simplify background elements
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(), 
+    panel.border = element_blank(), 
+    plot.title = element_text((hjust = 10)),
+    # axis.title.x = element_text(margin = margin(t = 5)),
+    # nudge axis text positions
+    axis.text.x.bottom = element_text(margin = margin(t = 5)),
+    axis.title.y.right = element_text(vjust = 2),
+    axis.title.y.left = element_text(vjust = 2),
+    legend.position = c(0.95,0.95),
+    legend.title = element_blank(),
+    ) +
+  xlab("Fiscal Year")
+  # ylim(0, 2000)
 
 ```
 
