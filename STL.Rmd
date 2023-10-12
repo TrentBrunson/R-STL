@@ -7,30 +7,46 @@ library(knitr)
 library(tidyverse)
 library(colorspace)
 library(cowplot)
+library(dplyr)
 opts_chunk$set(fig.align="center", fig.height=4, fig.width=5.5)
 ```
 
 Load the data from STL reporting and DPG reporting and compare
 ```{r message = FALSE}
-STL_spend <- read_csv("data\\STL_funding_levels.csv"
+STL_spend <- read_csv("data\\STL_funding_levels_no_formatting.csv"
   # , col_types = cols("Roadmap amounts (000's)" = col_double())
   )
 STL_spend
+
 colnames(STL_spend)
-STL_spend |> 
-  mutate("Roadmap amounts (000's)" = "Roadmap amounts (000's)" |> 
-  str_remove_all("\\$,")) |> as.numeric(unlist(x))
-STL_spend$var
+# STL_spend |> 
+#   mutate("Roadmap amounts (000's)" = "Roadmap amounts (000's)" |> 
+#   str_remove_all("\\$,")) |> as.numeric(unlist(x))
 ```
 
 ```{r message=FALSE}
 # examine colums; plot over time
 STL_spend |> ggplot(aes(FY)) + 
-  geom_point(aes(y = "Roadmap projects")) +
+  geom_point(aes(y = "Roadmap projects")) 
+  
+  +
   geom_col(aes(y = "Roadmap amounts (000's)"))
 
-ggplot(STL_spend, aes(FY, "Roadmap amounts (000's)"))
-  geom_line(aes(y = ))
+unique(STL_spend$"Roadmap amounts (000's)")
+
+ggplot(STL_spend, aes(FY, "Total (000's)", col = "Total (000's)")) +
+  geom_point() +
+  geom_line() 
+  ylim(0, 200000)
+  
+geom_line()
+
+p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+
+ggplot(STL_spend, aes(x = FY, y = "Total (000's)", group = "Total (000's)")) +
+  geom_point() +
+  geom_line() 
+
 # plot these degrees over time and display percentage of total
 # STL |>
 #   filter(field %in% six_degrees) |>
